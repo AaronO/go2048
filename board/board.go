@@ -222,7 +222,8 @@ func (b *Board) AddTile() {
     x := cell[0]
     y := cell[1]
 
-    b.Cells[y][x] = 1
+    // Set cell randomly to 1 or 2
+    b.Cells[y][x] = (rand.Int() % 2) + 1
 }
 
 func (b *Board) Playable() bool {
