@@ -74,7 +74,10 @@ func draw_cell(x int, y int, power int) {
 }
 
 func draw_score(b board.Board) {
+    // Accu
     score := 0
+
+    // Display offsets
     x := 24
     y := 4
 
@@ -85,8 +88,10 @@ func draw_score(b board.Board) {
         }
     }
 
+    // Build score string
     str := "Score: "+ strconv.Itoa(score)
 
+    // Draw Score string
     for i, c := range str {
         termbox.SetCell(x+i, y, c, termbox.ColorDefault, termbox.ColorDefault)
     }
