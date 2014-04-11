@@ -18,3 +18,9 @@ go get
 ```
 go run main.go
 ```
+
+## Features
+
+* Pretty colored output
+* Arrow keys input
+* Other stuff ...
