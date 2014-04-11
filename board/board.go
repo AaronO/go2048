@@ -1,6 +1,7 @@
 package board
 
 import (
+    "time"
     "math/rand"
 )
 
@@ -38,16 +39,33 @@ type Board struct {
 }
 
 func New() Board {
-    return Board{
+    board := Board{
+        /*
         Cells: [Y][X]int {
             {0, 3, 0, 0},
             {1, 0, 2, 0},
             {2, 1, 1, 0},
             {0, 6, 5, 0},
         },
+        */
+        Cells: [Y][X]int {
+            {0, 0, 0, 0},
+            {0, 0, 0, 0},
+            {0, 0, 0, 0},
+            {0, 0, 0, 0},
+        },
         goal:   2048,
         points: 0,
     }
+
+    // Seed rng
+    rand.Seed(time.Now().Unix())
+
+    // Add two random tiles
+    board.AddTile()
+    board.AddTile()
+
+    return board
 }
 
 func (b* Board) emptyRow(n int) []int {
