@@ -2,7 +2,6 @@ package main
 
 import (
     "fmt"
-    "math"
     "time"
     "strconv"
 
@@ -42,7 +41,12 @@ func cell_color(power int)termbox.Attribute {
 }
 
 func iPow(x int, n int) int {
-    return int(math.Pow(float64(x), float64(n)))
+    accu := 1
+    for i := 0; i < n; i++ {
+        accu *= x
+    }
+
+    return accu
 }
 
 func cell_str(power int)string {
@@ -74,9 +78,10 @@ func draw_score(b board.Board) {
     x := 24
     y := 4
 
+    // Compute score
     for _, v := range b.Values() {
         for i := 1; i < v+1; i++ {
-            score = score + iPow(2, i)
+            score = score + i * iPow(2, i-1)
         }
     }
 
