@@ -7,7 +7,7 @@ import (
 
     "github.com/nsf/termbox-go"
 
-    "./board"
+    "github.com/AaronO/go2048/board"
 )
 
 // Board size
