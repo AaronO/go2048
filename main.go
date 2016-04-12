@@ -28,12 +28,10 @@ var (
 )
 
 func pad(str string, pad string, length int) string {
-	for {
+	for len(str) < length {
 		str = pad + str
-		if len(str) > length-1 {
-			return str[0:length]
-		}
 	}
+	return str[0:length]
 }
 
 func cell_color(power int) termbox.Attribute {
