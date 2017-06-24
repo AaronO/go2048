@@ -129,7 +129,7 @@ func mergeLine(row []int, direction int) []int {
 	newRow := make([]int, len(row))
 	var start, end, pos, nextpos int
 
-	if direction == -1 {
+	if direction == 1 {
 		end = 0
 		start = len(row) - 1
 	} else {
@@ -139,7 +139,7 @@ func mergeLine(row []int, direction int) []int {
 
 	pos = start
 	for i := 0; i < len(row); i++ {
-		nextpos = pos + direction
+		nextpos = pos - direction
 
 		// Don't merge empty cells
 		// or already merged cells
