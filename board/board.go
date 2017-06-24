@@ -7,8 +7,8 @@ import (
 
 // Board size
 const (
-	X = 4
-	Y = 4
+	X = 5
+	Y = 5
 )
 
 // Direction
@@ -32,7 +32,7 @@ var (
 )
 
 type Board struct {
-	Cells [Y][X]int
+	Cells [][]int
 
 	goal   int
 	points int
@@ -48,12 +48,7 @@ func New() Board {
 		       {0, 6, 5, 0},
 		   },
 		*/
-		Cells: [Y][X]int{
-			{0, 0, 0, 0},
-			{0, 0, 0, 0},
-			{0, 0, 0, 0},
-			{0, 0, 0, 0},
-		},
+		Cells:  make2dArray(X, Y),
 		goal:   2048,
 		points: 0,
 	}
@@ -68,15 +63,25 @@ func New() Board {
 	return board
 }
 
+func make2dArray(x, y int) [][]int {
+	rows := make([][]int, y)
+
+	for i, _ := range rows {
+		rows[i] = make([]int, x)
+	}
+
+	return rows
+}
+
 func (b *Board) emptyRow(n int) []int {
-	row := []int{0, 0, 0, 0}
+	row := make([]int, n)
 	return row[0:n]
 }
 
-func (b *Board) moveLine(row [4]int, direction int) [4]int {
+func (b *Board) moveLine(row []int, direction int) []int {
 	var empty []int
 	var nonEmpty []int
-	var result [4]int
+	result := make([]int, len(row))
 
 	for i := 0; i < len(row); i++ {
 		if row[i] == 0 {
@@ -90,16 +95,16 @@ func (b *Board) moveLine(row [4]int, direction int) [4]int {
 
 	// Copy merges to result array
 	if direction == -1 {
-		copy(result[:], append(nonEmpty, empty...)[0:4])
+		copy(result[:], append(nonEmpty, empty...)[0:len(row)])
 	} else {
-		copy(result[:], append(empty, nonEmpty...)[0:4])
+		copy(result[:], append(empty, nonEmpty...)[0:len(row)])
 	}
 
 	return result
 }
 
 // Is a given line mergeable
-func canMergeLine(row [4]int) bool {
+func canMergeLine(row []int) bool {
 	for i := 0; i < len(row); i++ {
 		// Previous
 		if i > 0 && row[i] == row[i-1] {
@@ -115,8 +120,8 @@ func canMergeLine(row [4]int) bool {
 	return false
 }
 
-func (b *Board) mergeLine(row [4]int, direction int) [4]int {
-	var newRow [4]int
+func (b *Board) mergeLine(row []int, direction int) []int {
+	newRow := make([]int, len(row))
 	var start, end, pos, nextpos int
 
 	if direction == -1 {
@@ -154,24 +159,24 @@ func (b *Board) mergeLine(row [4]int, direction int) [4]int {
 	return newRow
 }
 
-func (b *Board) setRow(y int, row [4]int) {
+func (b *Board) setRow(y int, row []int) {
 	for x := 0; x < X; x++ {
 		b.Cells[y][x] = row[x]
 	}
 }
 
-func (b *Board) getRow(y int) [4]int {
+func (b *Board) getRow(y int) []int {
 	return b.Cells[y]
 }
 
-func (b *Board) setCol(x int, row [4]int) {
+func (b *Board) setCol(x int, row []int) {
 	for y := 0; y < Y; y++ {
 		b.Cells[y][x] = row[y]
 	}
 }
 
-func (b *Board) getCol(x int) [4]int {
-	var a [4]int
+func (b *Board) getCol(x int) []int {
+	a := make([]int, Y)
 
 	for y := 0; y < Y; y++ {
 		a[y] = b.Cells[y][x]
@@ -246,7 +251,8 @@ func (b *Board) AddTile() {
 	cell := cells[rand.Int()%len(cells)]
 
 	// Set cell randomly to 1 or 2
-	b.Cells[cell.y][cell.x] = (rand.Int() % 2) + 1
+	// b.Cells[cell.y][cell.x] = (rand.Int() % 2) + 1
+	b.Cells[cell.y][cell.x] = 1
 }
 
 func (b *Board) Playable() bool {
