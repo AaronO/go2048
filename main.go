@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"strconv"
 	"time"
 
@@ -66,14 +65,8 @@ func draw_cell(x int, y int, power int) {
 }
 
 func draw_score(b board.Board) {
-	// Accu
-	score := 0
-
-	// Display offsets
-	x := 24
-	y := 4
-
 	// Compute score
+	score := 0
 	for _, v := range b.Values() {
 		for n := v; n > 1; n-- {
 			score += iPow(2, v)
@@ -84,24 +77,40 @@ func draw_score(b board.Board) {
 	str := "Score: " + strconv.Itoa(score)
 
 	// Draw Score string
-	for i, c := range str {
-		termbox.SetCell(x+i, y, c, termbox.ColorDefault, termbox.ColorDefault)
-	}
+	draw_text(str, 24, 4, termbox.ColorDefault, termbox.ColorDefault)
 }
 
-func draw_board(b board.Board) {
-	termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
-
+func draw_cells(b board.Board) {
 	// Draw the cells
 	for y := 0; y < board.Y; y++ {
 		for x := 0; x < board.X; x++ {
 			draw_cell(x, y, b.Cells[y][x])
 		}
 	}
+}
 
+func draw_board(b board.Board) {
+	termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
+
+	draw_cells(b)
 	draw_score(b)
 
 	termbox.Flush()
+}
+
+func draw_loser(b board.Board) {
+	termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
+
+	draw_cells(b)
+	draw_text("WOW SUCH LOSER", 24, 4, termbox.ColorRed, termbox.ColorDefault)
+
+	termbox.Flush()
+}
+
+func draw_text(str string, x, y int, fg, bg termbox.Attribute) {
+	for i, c := range str {
+		termbox.SetCell(x+i, y, c, fg, bg)
+	}
 }
 
 func main() {
@@ -145,6 +154,12 @@ loop:
 					break loop
 				}
 
+				// Can no longer play
+				if !_board.Playable() {
+					draw_loser(_board)
+					continue
+				}
+
 				switch ev.Key {
 				case termbox.KeyArrowLeft:
 					_board.Move(board.LEFT)
@@ -154,14 +169,6 @@ loop:
 					_board.Move(board.UP)
 				case termbox.KeyArrowDown:
 					_board.Move(board.DOWN)
-				}
-
-				draw_board(_board)
-
-				// Can no longer play
-				if !_board.Playable() {
-					fmt.Println("\n\n\n\n\nLOST !")
-					break loop
 				}
 
 				draw_board(_board)
