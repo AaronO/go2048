@@ -120,6 +120,11 @@ func canMergeLine(row []int) bool {
 	return false
 }
 
+func moveAndMergeLine(line []int, direction int) []int {
+	// move then merge then move again
+	return moveLine(mergeLine(moveLine(line, direction), direction), direction)
+}
+
 func mergeLine(row []int, direction int) []int {
 	newRow := make([]int, len(row))
 	var start, end, pos, nextpos int
@@ -188,16 +193,7 @@ func (b *Board) getCol(x int) []int {
 func (b *Board) moveRows(d int) {
 	for y := 0; y < Y; y++ {
 		// Get new row by moving and merging previous row
-		var newRow = moveLine(
-			mergeLine(
-				moveLine(
-					b.getRow(y),
-					d,
-				),
-				d,
-			),
-			d,
-		)
+		var newRow = moveAndMergeLine(b.getRow(y), d)
 
 		// Set new row
 		b.setRow(y, newRow)
@@ -207,16 +203,7 @@ func (b *Board) moveRows(d int) {
 func (b *Board) moveCols(d int) {
 	for x := 0; x < X; x++ {
 		// Get new col by moving and merging previous col
-		var newCol = moveLine(
-			mergeLine(
-				moveLine(
-					b.getCol(x),
-					d,
-				),
-				d,
-			),
-			d,
-		)
+		var newCol = moveAndMergeLine(b.getCol(x), d)
 
 		// Set new col
 		b.setCol(x, newCol)
