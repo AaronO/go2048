@@ -288,8 +288,32 @@ func (b *Board) Values() []int {
 	return arr
 }
 
+func copyCells(src [][]int) [][]int {
+	dst := make2dArray(X, Y)
+	for y := 0; y < Y; y++ {
+		for x := 0; x < X; x++ {
+			dst[y][x] = src[y][x]
+		}
+	}
+	return dst
+}
+
+func cellsEqual(a, b [][]int) bool {
+	for y := 0; y < Y; y++ {
+		for x := 0; x < X; x++ {
+			if a[y][x] != b[y][x] {
+				return false
+			}
+		}
+	}
+	return true
+}
+
 // Move board in a given direction
 func (b *Board) Move(d Direction) {
+	// Make a copy of cells pre-moving (so we can see if anything changed)
+	oldCells := copyCells(b.Cells)
+
 	switch d {
 	case UP:
 		b.moveCols(DIRECTIONS[UP])
@@ -302,8 +326,11 @@ func (b *Board) Move(d Direction) {
 		b.moveRows(DIRECTIONS[RIGHT])
 	}
 
+	// TODO: don't add new tile if nothing in the board has changed
+	cellsChanged := !cellsEqual(oldCells, b.Cells)
+
 	// Add new tile if not empty
-	if !b.IsFull() {
+	if !b.IsFull() && cellsChanged {
 		b.AddTile()
 	}
 }
