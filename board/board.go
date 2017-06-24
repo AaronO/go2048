@@ -7,8 +7,8 @@ import (
 
 // Board size
 const (
-	X = 5
-	Y = 5
+	X = 4
+	Y = 4
 )
 
 // Direction
