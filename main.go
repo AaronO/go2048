@@ -81,8 +81,8 @@ func draw_score(b board.Board) {
 
 	// Compute score
 	for _, v := range b.Values() {
-		for i := 1; i < v+1; i++ {
-			score = score + i*iPow(2, i-1)
+		for n := v; n > 1; n-- {
+			score += iPow(2, v)
 		}
 	}
 
