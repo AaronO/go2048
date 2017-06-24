@@ -103,6 +103,7 @@ func draw_loser(b board.Board) {
 
 	draw_cells(b)
 	draw_text("WOW SUCH LOSER", 24, 4, termbox.ColorRed, termbox.ColorDefault)
+	draw_text(`Press "R" to restart`, 24, 6, termbox.ColorDefault, termbox.ColorDefault)
 
 	termbox.Flush()
 }
@@ -152,6 +153,11 @@ loop:
 				// Exit
 				if ev.Key == termbox.KeyCtrlC || ev.Key == termbox.KeyEsc {
 					break loop
+				}
+
+				// Restart game (if user has already lost)
+				if !_board.Playable() && (ev.Ch == 'r' || ev.Ch == 'R') {
+					_board = board.New()
 				}
 
 				// Can no longer play
