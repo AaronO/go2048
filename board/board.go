@@ -73,12 +73,12 @@ func make2dArray(x, y int) [][]int {
 	return rows
 }
 
-func (b *Board) emptyRow(n int) []int {
+func emptyRow(n int) []int {
 	row := make([]int, n)
 	return row[0:n]
 }
 
-func (b *Board) moveLine(row []int, direction int) []int {
+func moveLine(row []int, direction int) []int {
 	var empty []int
 	var nonEmpty []int
 	result := make([]int, len(row))
@@ -91,7 +91,7 @@ func (b *Board) moveLine(row []int, direction int) []int {
 		nonEmpty = append(nonEmpty, row[i])
 	}
 
-	empty = b.emptyRow(X - len(nonEmpty))
+	empty = emptyRow(X - len(nonEmpty))
 
 	// Copy merges to result array
 	if direction == -1 {
@@ -120,7 +120,7 @@ func canMergeLine(row []int) bool {
 	return false
 }
 
-func (b *Board) mergeLine(row []int, direction int) []int {
+func mergeLine(row []int, direction int) []int {
 	newRow := make([]int, len(row))
 	var start, end, pos, nextpos int
 
@@ -188,9 +188,9 @@ func (b *Board) getCol(x int) []int {
 func (b *Board) moveRows(d int) {
 	for y := 0; y < Y; y++ {
 		// Get new row by moving and merging previous row
-		var newRow = b.moveLine(
-			b.mergeLine(
-				b.moveLine(
+		var newRow = moveLine(
+			mergeLine(
+				moveLine(
 					b.getRow(y),
 					d,
 				),
@@ -207,9 +207,9 @@ func (b *Board) moveRows(d int) {
 func (b *Board) moveCols(d int) {
 	for x := 0; x < X; x++ {
 		// Get new col by moving and merging previous col
-		var newCol = b.moveLine(
-			b.mergeLine(
-				b.moveLine(
+		var newCol = moveLine(
+			mergeLine(
+				moveLine(
 					b.getCol(x),
 					d,
 				),
