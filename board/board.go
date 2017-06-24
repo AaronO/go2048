@@ -326,7 +326,7 @@ func (b *Board) Move(d Direction) {
 		b.moveRows(DIRECTIONS[RIGHT])
 	}
 
-	// TODO: don't add new tile if nothing in the board has changed
+	// Don't add new tile if nothing in the board has changed
 	cellsChanged := !cellsEqual(oldCells, b.Cells)
 
 	// Add new tile if not empty
