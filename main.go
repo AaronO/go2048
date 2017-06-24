@@ -10,12 +10,6 @@ import (
 	"github.com/AaronO/go2048/board"
 )
 
-// Board size
-const (
-	X = 4
-	Y = 4
-)
-
 var (
 	COLORS = []termbox.Attribute{
 		termbox.ColorWhite,
@@ -99,8 +93,8 @@ func draw_board(b board.Board) {
 	termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
 
 	// Draw the cells
-	for y := 0; y < Y; y++ {
-		for x := 0; x < X; x++ {
+	for y := 0; y < board.Y; y++ {
+		for x := 0; x < board.X; x++ {
 			draw_cell(x, y, b.Cells[y][x])
 		}
 	}
