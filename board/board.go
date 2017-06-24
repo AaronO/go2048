@@ -218,13 +218,17 @@ func (b *Board) moveCols(d int) {
 	}
 }
 
-func (b *Board) emptyCells() [][2]int {
-	var arr [][2]int
+type cellLocation struct {
+	x, y int
+}
+
+func (b *Board) emptyCells() []cellLocation {
+	var arr []cellLocation
 
 	for y := 0; y < Y; y++ {
 		for x := 0; x < X; x++ {
 			if b.Cells[y][x] == 0 {
-				var cell = [2]int{x, y}
+				var cell = cellLocation{x, y}
 				arr = append(arr, cell)
 			}
 		}
@@ -240,11 +244,9 @@ func (b *Board) IsFull() bool {
 func (b *Board) AddTile() {
 	cells := b.emptyCells()
 	cell := cells[rand.Int()%len(cells)]
-	x := cell[0]
-	y := cell[1]
 
 	// Set cell randomly to 1 or 2
-	b.Cells[y][x] = (rand.Int() % 2) + 1
+	b.Cells[cell.y][cell.x] = (rand.Int() % 2) + 1
 }
 
 func (b *Board) Playable() bool {
